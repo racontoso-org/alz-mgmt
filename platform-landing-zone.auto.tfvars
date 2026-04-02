@@ -48,10 +48,10 @@ custom_replacements = {
     # ==========================================================================
     primary_firewall_enabled                                             = true
     primary_firewall_sku_tier                                            = "Basic"
-    primary_firewall_management_ip_enabled                               = true   # Required for Basic SKU
-    primary_virtual_network_gateway_express_route_enabled                = false  # No on-prem (greenfield cloud-only)
-    primary_virtual_network_gateway_express_route_hobo_public_ip_enabled = false  # No on-prem
-    primary_virtual_network_gateway_vpn_enabled                          = false  # No on-prem (greenfield cloud-only)
+    primary_firewall_management_ip_enabled                               = true  # Required for Basic SKU
+    primary_virtual_network_gateway_express_route_enabled                = false # No on-prem (greenfield cloud-only)
+    primary_virtual_network_gateway_express_route_hobo_public_ip_enabled = false # No on-prem
+    primary_virtual_network_gateway_vpn_enabled                          = false # No on-prem (greenfield cloud-only)
     primary_private_dns_zones_enabled                                    = true
     primary_private_dns_auto_registration_zone_enabled                   = true
     primary_private_dns_resolver_enabled                                 = true
@@ -110,7 +110,7 @@ custom_replacements = {
     primary_hub_address_space                          = "10.0.0.0/16"
     primary_hub_virtual_network_address_space          = "10.0.0.0/22"
     primary_firewall_subnet_address_prefix             = "10.0.0.0/26"
-    primary_firewall_management_subnet_address_prefix  = "10.0.0.192/26"  # Required for Basic SKU
+    primary_firewall_management_subnet_address_prefix  = "10.0.0.192/26" # Required for Basic SKU
     primary_bastion_subnet_address_prefix              = "10.0.0.64/26"
     primary_gateway_subnet_address_prefix              = "10.0.0.128/27"
     primary_private_dns_resolver_subnet_address_prefix = "10.0.0.160/28"
@@ -139,13 +139,13 @@ Applied to all resources created by this module.
 TODO: Update CostCenter and Owner before production deployment.
 */
 tags = {
-  deployed_by        = "terraform"
-  source             = "Azure Landing Zones Accelerator"
-  environment        = "dev"
-  managed_by         = "platform-team"
+  deployed_by         = "terraform"
+  source              = "Azure Landing Zones Accelerator"
+  environment         = "dev"
+  managed_by          = "platform-team"
   data_classification = "internal"
-  cost_center        = "n/a"   # TODO: update with your cost center
-  owner              = "rickyabbas"   # TODO: update with your platform team name
+  cost_center         = "n/a"        # TODO: update with your cost center
+  owner               = "rickyabbas" # TODO: update with your platform team name
 }
 
 /*
@@ -184,9 +184,9 @@ Corp and Online workload subscriptions are NOT placed here - they should be
 moved manually or via subscription vending after initial deployment.
 */
 management_group_settings = {
-  enable_telemetry  = true
-  architecture_name = "alz_custom"
-  location          = "$${starter_location_01}"
+  enable_telemetry   = true
+  architecture_name  = "alz_custom"
+  location           = "$${starter_location_01}"
   parent_resource_id = "$${root_parent_management_group_id}"
   policy_default_values = {
     ama_change_tracking_data_collection_rule_id = "$${ama_change_tracking_data_collection_rule_id}"
@@ -206,15 +206,15 @@ management_group_settings = {
   }
   subscription_placement = {
     identity = {
-      subscription_id       = "$${subscription_id_identity}"      # ed4b8c61
+      subscription_id       = "$${subscription_id_identity}" # ed4b8c61
       management_group_name = "identity"
     }
     connectivity = {
-      subscription_id       = "$${subscription_id_connectivity}"  # c1d3654a
+      subscription_id       = "$${subscription_id_connectivity}" # c1d3654a
       management_group_name = "connectivity"
     }
     management = {
-      subscription_id       = "$${subscription_id_management}"    # 4a10859b
+      subscription_id       = "$${subscription_id_management}" # 4a10859b
       management_group_name = "management"
     }
     # Security subscription is not configured (only 5 subs available)
@@ -257,7 +257,7 @@ connectivity_resource_groups = {
     name     = "$${ddos_resource_group_name}"
     location = "$${starter_location_01}"
     settings = {
-      enabled = "$${ddos_protection_plan_enabled}"  # false - disabled for dev/test
+      enabled = "$${ddos_protection_plan_enabled}" # false - disabled for dev/test
     }
   }
   vnet_primary = {
@@ -271,14 +271,14 @@ connectivity_resource_groups = {
     name     = "$${dns_resource_group_name}"
     location = "$${starter_location_01}"
     settings = {
-      enabled = "$${primary_private_dns_zones_enabled}"  # true
+      enabled = "$${primary_private_dns_zones_enabled}" # true
     }
   }
 }
 
 hub_and_spoke_networks_settings = {
   enabled_resources = {
-    ddos_protection_plan = "$${ddos_protection_plan_enabled}"  # false
+    ddos_protection_plan = "$${ddos_protection_plan_enabled}" # false
   }
   ddos_protection_plan = {
     name                = "$${ddos_protection_plan_name}"
@@ -301,8 +301,8 @@ hub_virtual_networks = {
     }
     hub_virtual_network = {
       name                          = "$${primary_virtual_network_name}"
-      address_space                 = ["$${primary_hub_virtual_network_address_space}"]  # 10.0.0.0/22
-      routing_address_space         = ["$${primary_hub_address_space}"]                  # 10.0.0.0/16
+      address_space                 = ["$${primary_hub_virtual_network_address_space}"] # 10.0.0.0/22
+      routing_address_space         = ["$${primary_hub_address_space}"]                 # 10.0.0.0/16
       route_table_name_firewall     = "$${primary_route_table_firewall_name}"
       route_table_name_user_subnets = "$${primary_route_table_user_subnets_name}"
       subnets                       = {}
@@ -311,13 +311,13 @@ hub_virtual_networks = {
       subnet_address_prefix            = "$${primary_firewall_subnet_address_prefix}"            # 10.0.0.0/26
       management_subnet_address_prefix = "$${primary_firewall_management_subnet_address_prefix}" # 10.0.0.192/26 - required for Basic SKU
       name                             = "$${primary_firewall_name}"
-      sku_tier                         = "$${primary_firewall_sku_tier}"                         # Basic
+      sku_tier                         = "$${primary_firewall_sku_tier}" # Basic
       default_ip_configuration = {
         public_ip_config = {
           name = "$${primary_firewall_public_ip_name}"
         }
       }
-      management_ip_enabled = "$${primary_firewall_management_ip_enabled}"  # true - required for Basic SKU
+      management_ip_enabled = "$${primary_firewall_management_ip_enabled}" # true - required for Basic SKU
       management_ip_configuration = {
         public_ip_config = {
           name = "$${primary_firewall_management_public_ip_name}"
@@ -326,13 +326,13 @@ hub_virtual_networks = {
     }
     firewall_policy = {
       name = "$${primary_firewall_policy_name}"
-      sku  = "$${primary_firewall_sku_tier}"  # Basic
+      sku  = "$${primary_firewall_sku_tier}" # Basic
     }
     virtual_network_gateways = {
-      subnet_address_prefix = "$${primary_gateway_subnet_address_prefix}"  # 10.0.0.128/27
+      subnet_address_prefix = "$${primary_gateway_subnet_address_prefix}" # 10.0.0.128/27
       express_route = {
         name                                  = "$${primary_virtual_network_gateway_express_route_name}"
-        hosted_on_behalf_of_public_ip_enabled = "$${primary_virtual_network_gateway_express_route_hobo_public_ip_enabled}"  # false
+        hosted_on_behalf_of_public_ip_enabled = "$${primary_virtual_network_gateway_express_route_hobo_public_ip_enabled}" # false
         ip_configurations = {
           default = {
             public_ip = {
@@ -362,15 +362,15 @@ hub_virtual_networks = {
       private_link_private_dns_zones_regex_filter = {
         enabled = false
       }
-      auto_registration_zone_enabled = "$${primary_private_dns_auto_registration_zone_enabled}"  # true
+      auto_registration_zone_enabled = "$${primary_private_dns_auto_registration_zone_enabled}" # true
       auto_registration_zone_name    = "$${primary_auto_registration_zone_name}"
     }
     private_dns_resolver = {
-      subnet_address_prefix = "$${primary_private_dns_resolver_subnet_address_prefix}"  # 10.0.0.160/28
+      subnet_address_prefix = "$${primary_private_dns_resolver_subnet_address_prefix}" # 10.0.0.160/28
       name                  = "$${primary_private_dns_resolver_name}"
     }
     bastion = {
-      subnet_address_prefix = "$${primary_bastion_subnet_address_prefix}"  # 10.0.0.64/26
+      subnet_address_prefix = "$${primary_bastion_subnet_address_prefix}" # 10.0.0.64/26
       name                  = "$${primary_bastion_host_name}"
       bastion_public_ip = {
         name = "$${primary_bastion_host_public_ip_name}"
